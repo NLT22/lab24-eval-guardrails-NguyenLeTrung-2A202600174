@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lab 24 — Evaluation & Guardrail Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface2: #232636;
+    --border: #2e3147;
+    --text: #e2e8f0;
+    --muted: #8892a4;
+    --accent: #6366f1;
+    --green: #22c55e;
+    --red: #ef4444;
+    --yellow: #f59e0b;
+    --blue: #3b82f6;
+    --purple: #a855f7;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; font-size: 14px; }
+  header { background: var(--surface); border-bottom: 1px solid var(--border); padding: 16px 24px; display: flex; align-items: center; gap: 16px; }
+  header h1 { font-size: 18px; font-weight: 700; color: var(--text); }
+  header span { color: var(--muted); font-size: 13px; }
+  .badge { background: var(--accent); color: white; padding: 2px 10px; border-radius: 99px; font-size: 11px; font-weight: 600; }
+
+  nav { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 24px; display: flex; gap: 4px; }
+  .tab { padding: 12px 20px; cursor: pointer; border-bottom: 2px solid transparent; color: var(--muted); font-weight: 500; font-size: 13px; transition: all .15s; }
+  .tab:hover { color: var(--text); }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  .page { display: none; padding: 24px; max-width: 1200px; margin: 0 auto; }
+  .page.active { display: block; }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .col-span-2 { grid-column: span 2; }
+
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+  .card h3 { font-size: 13px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 16px; }
+
+  .kpi { text-align: center; }
+  .kpi .value { font-size: 36px; font-weight: 700; line-height: 1; margin-bottom: 4px; }
+  .kpi .label { font-size: 12px; color: var(--muted); }
+  .kpi .sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  .green { color: var(--green); }
+  .red { color: var(--red); }
+  .yellow { color: var(--yellow); }
+  .blue { color: var(--blue); }
+
+  canvas { max-height: 320px; }
+  .chart-tall canvas { max-height: 400px; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; padding: 8px 12px; color: var(--muted); font-weight: 600; border-bottom: 1px solid var(--border); font-size: 11px; text-transform: uppercase; }
+  td { padding: 8px 12px; border-bottom: 1px solid var(--border); }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--surface2); }
+
+  .pill { display: inline-block; padding: 2px 8px; border-radius: 99px; font-size: 11px; font-weight: 600; }
+  .pill-green { background: rgba(34,197,94,.15); color: var(--green); }
+  .pill-red { background: rgba(239,68,68,.15); color: var(--red); }
+  .pill-yellow { background: rgba(245,158,11,.15); color: var(--yellow); }
+  .pill-blue { background: rgba(59,130,246,.15); color: var(--blue); }
+
+  .section-title { font-size: 16px; font-weight: 700; margin-bottom: 16px; color: var(--text); }
+  .mb-20 { margin-bottom: 20px; }
+
+  .metric-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .metric-row .name { flex: 1; font-size: 13px; }
+  .metric-row .bar-wrap { flex: 2; background: var(--surface2); border-radius: 4px; height: 8px; overflow: hidden; }
+  .metric-row .bar { height: 100%; border-radius: 4px; transition: width .8s ease; }
+  .metric-row .val { width: 50px; text-align: right; font-size: 13px; font-weight: 600; }
+  .metric-row .target { width: 60px; text-align: right; font-size: 11px; color: var(--muted); }
+
+  .attack-badge { font-size: 11px; padding: 2px 6px; border-radius: 4px; font-weight: 600; }
+  .ab-dan { background: rgba(239,68,68,.15); color: #ef4444; }
+  .ab-roleplay { background: rgba(245,158,11,.15); color: #f59e0b; }
+  .ab-split { background: rgba(168,85,247,.15); color: #a855f7; }
+  .ab-encoding { background: rgba(59,130,246,.15); color: #3b82f6; }
+  .ab-indirect { background: rgba(34,197,94,.15); color: #22c55e; }
+
+  .legend { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 12px; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--muted); }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Lab 24 — Evaluation &amp; Guardrail System</h1>
+    <span>Nguyễn Lê Trung · 2A202600174 · Vietnamese RAG Pipeline</span>
+  </div>
+  <span class="badge">Live Dashboard</span>
+</header>
+
+<nav>
+  <div class="tab active" onclick="switchTab('overview')">Overview</div>
+  <div class="tab" onclick="switchTab('phaseA')">Phase A — RAGAS</div>
+  <div class="tab" onclick="switchTab('phaseB')">Phase B — LLM Judge</div>
+  <div class="tab" onclick="switchTab('phaseC')">Phase C — Guardrails</div>
+  <div class="tab" onclick="switchTab('phaseD')">Phase D — Blueprint</div>
+</nav>
+
+<!-- OVERVIEW -->
+<div id="overview" class="page active">
+  <div class="section-title mb-20">Tổng quan hệ thống</div>
+  <div class="grid-4 mb-20">
+    <div class="card kpi">
+      <div class="value red">0.720</div>
+      <div class="label">Faithfulness</div>
+      <div class="sub">Target ≥ 0.85 · Phase A</div>
+    </div>
+    <div class="card kpi">
+      <div class="value yellow">0.760</div>
+      <div class="label">Answer Relevancy</div>
+      <div class="sub">Target ≥ 0.80 · Phase A</div>
+    </div>
+    <div class="card kpi">
+      <div class="value green">0.583</div>
+      <div class="label">Cohen's Kappa</div>
+      <div class="sub">Moderate agreement · Phase B</div>
+    </div>
+    <div class="card kpi">
+      <div class="value green">90%</div>
+      <div class="label">Adversarial Block Rate</div>
+      <div class="sub">18/20 attacks · Phase C</div>
+    </div>
+  </div>
+
+  <div class="grid-2 mb-20">
+    <div class="card">
+      <h3>RAGAS Metrics vs Targets</h3>
+      <div class="metric-row">
+        <div class="name">Faithfulness</div>
+        <div class="bar-wrap"><div class="bar" style="width:72%;background:#ef4444"></div></div>
+        <div class="val red">0.720</div>
+        <div class="target">/ 0.85</div>
+      </div>
+      <div class="metric-row">
+        <div class="name">Answer Relevancy</div>
+        <div class="bar-wrap"><div class="bar" style="width:76%;background:#f59e0b"></div></div>
+        <div class="val yellow">0.760</div>
+        <div class="target">/ 0.80</div>
+      </div>
+      <div class="metric-row">
+        <div class="name">Context Precision</div>
+        <div class="bar-wrap"><div class="bar" style="width:89%;background:#22c55e"></div></div>
+        <div class="val green">0.892</div>
+        <div class="target">/ 0.70</div>
+      </div>
+      <div class="metric-row">
+        <div class="name">Context Recall</div>
+        <div class="bar-wrap"><div class="bar" style="width:87%;background:#22c55e"></div></div>
+        <div class="val green">0.865</div>
+        <div class="target">/ 0.75</div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Guardrail Performance</h3>
+      <div class="metric-row">
+        <div class="name">PII Detection</div>
+        <div class="bar-wrap"><div class="bar" style="width:100%;background:#22c55e"></div></div>
+        <div class="val green">100%</div>
+        <div class="target">7/7</div>
+      </div>
+      <div class="metric-row">
+        <div class="name">Adversarial Block</div>
+        <div class="bar-wrap"><div class="bar" style="width:90%;background:#22c55e"></div></div>
+        <div class="val green">90%</div>
+        <div class="target">18/20</div>
+      </div>
+      <div class="metric-row">
+        <div class="name">L1 Latency P50</div>
+        <div class="bar-wrap"><div class="bar" style="width:30%;background:#3b82f6"></div></div>
+        <div class="val blue">15 ms</div>
+        <div class="target">/ 50ms</div>
+      </div>
+      <div class="metric-row">
+        <div class="name">Total P95</div>
+        <div class="bar-wrap"><div class="bar" style="width:55%;background:#6366f1"></div></div>
+        <div class="val" style="color:#6366f1">551 ms</div>
+        <div class="target">/ 1000ms</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-3">
+    <div class="card">
+      <h3>Failure Clusters (Phase A)</h3>
+      <canvas id="clusterChart"></canvas>
+    </div>
+    <div class="card">
+      <h3>Judge Label Distribution (Phase B)</h3>
+      <canvas id="judgeDistChart"></canvas>
+    </div>
+    <div class="card">
+      <h3>Attack Types Blocked (Phase C)</h3>
+      <canvas id="attackOverviewChart"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- PHASE A -->
+<div id="phaseA" class="page">
+  <div class="section-title mb-20">Phase A — RAGAS Evaluation</div>
+  <div class="grid-4 mb-20">
+    <div class="card kpi">
+      <div class="value red">0.720</div>
+      <div class="label">Faithfulness</div>
+      <div class="sub"><span class="pill pill-red">below 0.85</span></div>
+    </div>
+    <div class="card kpi">
+      <div class="value yellow">0.760</div>
+      <div class="label">Answer Relevancy</div>
+      <div class="sub"><span class="pill pill-yellow">below 0.80</span></div>
+    </div>
+    <div class="card kpi">
+      <div class="value green">0.892</div>
+      <div class="label">Context Precision</div>
+      <div class="sub"><span class="pill pill-green">above 0.70</span></div>
+    </div>
+    <div class="card kpi">
+      <div class="value green">0.865</div>
+      <div class="label">Context Recall</div>
+      <div class="sub"><span class="pill pill-green">above 0.75</span></div>
+    </div>
+  </div>
+
+  <div class="grid-2 mb-20">
+    <div class="card">
+      <h3>Radar — Actual vs Target</h3>
+      <canvas id="radarChart"></canvas>
+    </div>
+    <div class="card">
+      <h3>Failure Cluster Analysis (10 failures / 33 questions)</h3>
+      <canvas id="clusterDetailChart"></canvas>
+      <div class="legend" style="margin-top:16px">
+        <div class="legend-item"><div class="legend-dot" style="background:#ef4444"></div>C1: Faithfulness (6q)</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#f59e0b"></div>C2: Answer Relevancy (1q)</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#a855f7"></div>C3: Context Precision (2q)</div>
+        <div class="legend-item"><div class="legend-dot" style="background:#3b82f6"></div>C4: Context Recall (1q)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card chart-tall mb-20">
+    <h3>Faithfulness per Question (33 live questions)</h3>
+    <canvas id="faithfulnessChart"></canvas>
+  </div>
+
+  <div class="card">
+    <h3>Pre-computed Report (54 questions) vs Live Run (33 questions)</h3>
+    <table>
+      <thead><tr><th>Metric</th><th>Pre-computed (54q)</th><th>Live Run (33q)</th><th>Target</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>Faithfulness</td><td>0.724</td><td>0.720</td><td>≥ 0.85</td><td><span class="pill pill-red">below</span></td></tr>
+        <tr><td>Answer Relevancy</td><td>0.722</td><td>0.760</td><td>≥ 0.80</td><td><span class="pill pill-yellow">below</span></td></tr>
+        <tr><td>Context Precision</td><td>0.958</td><td>0.892</td><td>≥ 0.70</td><td><span class="pill pill-green">above</span></td></tr>
+        <tr><td>Context Recall</td><td>0.805</td><td>0.865</td><td>≥ 0.75</td><td><span class="pill pill-green">above</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- PHASE B -->
+<div id="phaseB" class="page">
+  <div class="section-title mb-20">Phase B — LLM-as-Judge Evaluation</div>
+  <div class="grid-3 mb-20">
+    <div class="card kpi">
+      <div class="value yellow">0.583</div>
+      <div class="label">Cohen's Kappa</div>
+      <div class="sub">Moderate agreement</div>
+    </div>
+    <div class="card kpi">
+      <div class="value blue">30</div>
+      <div class="label">Questions Judged</div>
+      <div class="sub">Swap-and-average</div>
+    </div>
+    <div class="card kpi">
+      <div class="value green">4.16</div>
+      <div class="label">Avg Overall Score</div>
+      <div class="sub">Out of 5.0</div>
+    </div>
+  </div>
+
+  <div class="grid-2 mb-20">
+    <div class="card">
+      <h3>Human vs Judge Label Comparison</h3>
+      <canvas id="kappaChart"></canvas>
+    </div>
+    <div class="card">
+      <h3>Absolute Scores — 4 Dimensions (sample 30q)</h3>
+      <canvas id="absScoresChart"></canvas>
+    </div>
+  </div>
+
+  <div class="grid-2 mb-20">
+    <div class="card">
+      <h3>Pairwise Winner Distribution (30 questions)</h3>
+      <canvas id="pairwiseChart"></canvas>
+    </div>
+    <div class="card">
+      <h3>Kappa Analysis</h3>
+      <table>
+        <thead><tr><th>Label</th><th>Human Count</th><th>Judge Count</th><th>Difference</th></tr></thead>
+        <tbody>
+          <tr><td>A (RAG answer wins)</td><td>8</td><td>6</td><td class="red">-2</td></tr>
+          <tr><td>B (raw context wins)</td><td>1</td><td>1</td><td class="green">0</td></tr>
+          <tr><td>Tie</td><td>1</td><td>3</td><td class="red">+2</td></tr>
+        </tbody>
+      </table>
+      <div style="margin-top:16px;padding:12px;background:var(--surface2);border-radius:8px;font-size:12px;color:var(--muted);line-height:1.6">
+        <strong style="color:var(--text)">Root cause (kappa &lt; 0.6):</strong> Judge applies conservative swap policy — when two ordered runs disagree, defaults to "tie". Human labeled 8/10 as A; judge labeled 6/10 as A and 3/10 as tie.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Sample Absolute Scores (10 questions)</h3>
+    <table>
+      <thead><tr><th>#</th><th>Question (truncated)</th><th>Accuracy</th><th>Relevance</th><th>Conciseness</th><th>Helpfulness</th><th>Overall</th></tr></thead>
+      <tbody id="absScoresTable"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- PHASE C -->
+<div id="phaseC" class="page">
+  <div class="section-title mb-20">Phase C — Guardrail Stack</div>
+  <div class="grid-4 mb-20">
+    <div class="card kpi">
+      <div class="value green">7/7</div>
+      <div class="label">PII Detected</div>
+      <div class="sub">100% detection rate</div>
+    </div>
+    <div class="card kpi">
+      <div class="value green">18/20</div>
+      <div class="label">Attacks Blocked</div>
+      <div class="sub">90% block rate</div>
+    </div>
+    <div class="card kpi">
+      <div class="value blue">15 ms</div>
+      <div class="label">L1 P50 Latency</div>
+      <div class="sub">Warm model</div>
+    </div>
+    <div class="card kpi">
+      <div class="value" style="color:#6366f1">551 ms</div>
+      <div class="label">Total P95</div>
+      <div class="sub">incl. LM Studio</div>
+    </div>
+  </div>
+
+  <div class="grid-2 mb-20">
+    <div class="card chart-tall">
+      <h3>Latency per Layer — 100 Requests (ms)</h3>
+      <canvas id="latencyChart"></canvas>
+    </div>
+    <div class="card">
+      <h3>L1 Latency Distribution (P50/P95/P99)</h3>
+      <canvas id="latencyBoxChart"></canvas>
+      <div style="margin-top:16px">
+        <table>
+          <thead><tr><th>Layer</th><th>P50</th><th>P95</th><th>P99</th></tr></thead>
+          <tbody>
+            <tr><td>L1 Input Guards</td><td class="green">15 ms</td><td class="yellow">424 ms</td><td class="red">597 ms</td></tr>
+            <tr><td>L3 Output Guard</td><td class="blue">512 ms</td><td class="blue">534 ms</td><td class="blue">555 ms</td></tr>
+            <tr><td>Total</td><td style="color:#6366f1">521 ms</td><td style="color:#6366f1">551 ms</td><td style="color:#6366f1">575 ms</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2 mb-20">
+    <div class="card">
+      <h3>Adversarial Attack Results (20 attacks)</h3>
+      <table>
+        <thead><tr><th>Type</th><th>Count</th><th>Blocked</th><th>Rate</th></tr></thead>
+        <tbody>
+          <tr><td><span class="attack-badge ab-dan">DAN</span></td><td>5</td><td>5</td><td><span class="pill pill-green">100%</span></td></tr>
+          <tr><td><span class="attack-badge ab-roleplay">Roleplay</span></td><td>5</td><td>5</td><td><span class="pill pill-green">100%</span></td></tr>
+          <tr><td><span class="attack-badge ab-split">Payload Split</span></td><td>3</td><td>3</td><td><span class="pill pill-green">100%</span></td></tr>
+          <tr><td><span class="attack-badge ab-encoding">Encoding</span></td><td>3</td><td>3</td><td><span class="pill pill-green">100%</span></td></tr>
+          <tr><td><span class="attack-badge ab-indirect">Indirect Injection</span></td><td>4</td><td>2</td><td><span class="pill pill-yellow">50%</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <h3>PII Detection Results (7 positive cases)</h3>
+      <table>
+        <thead><tr><th>PII Type</th><th>Detected</th><th>Redacted Example</th></tr></thead>
+        <tbody>
+          <tr><td>CCCD (12-digit)</td><td><span class="pill pill-green">Yes</span></td><td style="color:var(--muted);font-size:11px">[CCCD]</td></tr>
+          <tr><td>Phone VN (10-digit)</td><td><span class="pill pill-green">Yes</span></td><td style="color:var(--muted);font-size:11px">[PHONE_VN]</td></tr>
+          <tr><td>Email</td><td><span class="pill pill-green">Yes</span></td><td style="color:var(--muted);font-size:11px">[EMAIL]</td></tr>
+          <tr><td>PERSON name</td><td><span class="pill pill-green">Yes</span></td><td style="color:var(--muted);font-size:11px">&lt;PERSON&gt;</td></tr>
+          <tr><td>Tax Code</td><td><span class="pill pill-green">Yes</span></td><td style="color:var(--muted);font-size:11px">[PHONE_VN] (via regex)</td></tr>
+          <tr><td>Empty input</td><td><span class="pill pill-blue">N/A</span></td><td style="color:var(--muted);font-size:11px">no false positive</td></tr>
+          <tr><td>Normal text</td><td><span class="pill pill-blue">No</span></td><td style="color:var(--muted);font-size:11px">no false positive</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- PHASE D -->
+<div id="phaseD" class="page">
+  <div class="section-title mb-20">Phase D — Production Blueprint</div>
+
+  <div class="card mb-20">
+    <h3>SLO Table — 7 Production Metrics</h3>
+    <table>
+      <thead><tr><th>Metric</th><th>Target</th><th>Actual</th><th>Measurement</th><th>Alert Threshold</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>Faithfulness</td><td>≥ 0.85</td><td class="red">0.720</td><td>RAGAS live eval (hourly sample)</td><td>&lt; 0.70</td><td><span class="pill pill-red">below SLO</span></td></tr>
+        <tr><td>Answer Relevancy</td><td>≥ 0.80</td><td class="yellow">0.760</td><td>RAGAS live eval</td><td>&lt; 0.65</td><td><span class="pill pill-yellow">below SLO</span></td></tr>
+        <tr><td>Context Precision</td><td>≥ 0.70</td><td class="green">0.892</td><td>RAGAS live eval</td><td>&lt; 0.60</td><td><span class="pill pill-green">within SLO</span></td></tr>
+        <tr><td>Context Recall</td><td>≥ 0.75</td><td class="green">0.865</td><td>RAGAS live eval</td><td>&lt; 0.60</td><td><span class="pill pill-green">within SLO</span></td></tr>
+        <tr><td>PII Detection Rate</td><td>≥ 99%</td><td class="green">100%</td><td>Guardrail audit log</td><td>&lt; 90%</td><td><span class="pill pill-green">within SLO</span></td></tr>
+        <tr><td>L1 Latency P95</td><td>≤ 50 ms</td><td class="red">424 ms</td><td>Request timing middleware</td><td>&gt; 200 ms</td><td><span class="pill pill-red">cold-start spike</span></td></tr>
+        <tr><td>Adversarial Block Rate</td><td>≥ 95%</td><td class="yellow">90%</td><td>Attack test suite (daily)</td><td>&lt; 85%</td><td><span class="pill pill-yellow">below SLO</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="grid-2 mb-20">
+    <div class="card">
+      <h3>Monthly Cost Breakdown (~100k queries/month)</h3>
+      <canvas id="costChart"></canvas>
+    </div>
+    <div class="card">
+      <h3>3 Alert Playbooks</h3>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div style="padding:12px;background:var(--surface2);border-radius:8px;border-left:3px solid var(--red)">
+          <div style="font-weight:600;font-size:13px;margin-bottom:4px">Playbook 1: Faithfulness Drop</div>
+          <div style="font-size:12px;color:var(--muted)">Trigger: F &lt; 0.70 trong cửa sổ 1 giờ · Nguyên nhân: top-k quá thấp, prompt bị sửa, model rollback · Fix: tăng top-k lên 5, thêm evidence-only prompt constraint</div>
+        </div>
+        <div style="padding:12px;background:var(--surface2);border-radius:8px;border-left:3px solid var(--yellow)">
+          <div style="font-weight:600;font-size:13px;margin-bottom:4px">Playbook 2: L1 Latency Spike</div>
+          <div style="font-size:12px;color:var(--muted)">Trigger: L1 P95 &gt; 200ms · Nguyên nhân: embedding model cold-start (process restart hoặc idle timeout) · Fix: keepalive ping mỗi 60s, hoặc chuyển sang Groq Llama Guard free tier</div>
+        </div>
+        <div style="padding:12px;background:var(--surface2);border-radius:8px;border-left:3px solid var(--blue)">
+          <div style="font-weight:600;font-size:13px;margin-bottom:4px">Playbook 3: PII Detection Drop</div>
+          <div style="font-size:12px;color:var(--muted)">Trigger: PII rate &lt; 90% trong daily test · Nguyên nhân: Presidio model không load, regex pattern bị comment out · Fix: fallback sang rule-based-only mode, alert on-call</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Architecture — Defense-in-Depth Pipeline</h3>
+    <div style="padding:20px;background:var(--surface2);border-radius:8px;font-family:monospace;font-size:12px;color:var(--muted);line-height:2">
+      <span style="color:#6366f1">User Query</span>
+      &nbsp;→&nbsp;<span style="color:#ef4444">L1: PII Redaction</span> + <span style="color:#ef4444">Topic Validation</span>
+      &nbsp;→&nbsp;<span style="color:#a855f7">L2: Qdrant Hybrid Search</span> (BM25 + dense, reranker)
+      &nbsp;→&nbsp;<span style="color:#3b82f6">L2b: LLM Generation</span> (OpenAI / LM Studio)
+      &nbsp;→&nbsp;<span style="color:#f59e0b">L3: Llama Guard Output Safety</span> (HF → LM Studio → rule-based)
+      &nbsp;→&nbsp;<span style="color:#22c55e">L4: Async Audit Log</span>
+      &nbsp;→&nbsp;<span style="color:#6366f1">Response</span>
+    </div>
+  </div>
+</div>
+
+<script>
+const COLORS = {
+  red: '#ef4444', yellow: '#f59e0b', green: '#22c55e',
+  blue: '#3b82f6', purple: '#a855f7', indigo: '#6366f1',
+  muted: '#8892a4', border: '#2e3147'
+};
+
+Chart.defaults.color = '#8892a4';
+Chart.defaults.borderColor = '#2e3147';
+
+function switchTab(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// ─── DATA ───────────────────────────────────────────────────────────────────
+
+const ragasData = {
+  faithfulness: [1.0,1.0,1.0,1.0,0.667,1.0,0.0,0.0,1.0,0.0,0.0,1.0,1.0,1.0,1.0,0.0,1.0,1.0,1.0,0.5,0.0,1.0,1.0,1.0,1.0,0.5,1.0,0.333,0.6,1.0,1.0,0.5,1.0],
+  answer_rel: [0.856,0.874,0.0,0.833,0.871,0.854,0.0,0.0,0.846,0.765,0.849,0.860,0.820,0.819,0.824,0.818,0.763,0.969,0.900,0.794,0.748,0.830,0.896,0.895,0.805,0.779,0.911,0.818,0.877,0.913,0.839,0.812,0.840],
+  questions: Array.from({length:33}, (_,i) => `Q${i+1}`)
+};
+
+const absoluteScores = [
+  {q:'Mã số thuế DHA SURFACES',acc:5,rel:5,con:5,help:5,overall:5.0},
+  {q:'Thuế GTGT phát sinh Q4/2024',acc:1,rel:5,con:5,help:1,overall:3.0},
+  {q:'Sự im lặng = đồng ý?',acc:5,rel:5,con:5,help:5,overall:5.0},
+  {q:'Thời hạn hạn chế xử lý',acc:5,rel:5,con:5,help:5,overall:5.0},
+  {q:'Dữ liệu nhạy cảm gồm gì?',acc:4,rel:5,con:4,help:4,overall:4.25},
+  {q:'Tên công ty nộp GTGT Q4',acc:1,rel:5,con:4,help:2,overall:3.0},
+  {q:'Kỳ tính thuế GTGT',acc:1,rel:2,con:5,help:1,overall:1.25},
+  {q:'Tờ khai nộp lần đầu?',acc:1,rel:2,con:5,help:1,overall:2.25},
+  {q:'Người ký tờ khai',acc:1,rel:5,con:5,help:1,overall:3.0},
+  {q:'Tờ khai theo mẫu số?',acc:5,rel:5,con:5,help:5,overall:5.0},
+];
+
+const latencyData = [28.4,282.8,12.7,17.5,20.2,279.9,8.3,12.4,10.9,275.8,15.8,9.9,10.2,280.1,18.3,12.9,14.8,306.8,11.7,22.2,11.5,424.3,9.2,9.2,11.4,267.5,15.4,9.6,9.7,563.3,14.9,10.0,11.8,383.7,9.8,9.2,21.2,405.0,8.0,10.8,21.0,257.4,10.8,9.0,17.9,474.7,8.4,10.0,19.7,232.3,8.0,10.0,20.1,373.7,7.3,9.6,14.7,245.8,14.7,9.8,19.8,281.5,14.0,15.8,26.6,596.7,13.0,12.2,10.6,242.6,8.4,9.2,11.7,238.6,14.2,9.4,10.0,357.9,8.7,8.8,21.7,391.5,8.2,14.8,10.3,6227.3,7.6,21.5,21.5,382.4,14.5,9.1,10.2,427.2,12.5,18.1,25.0,329.3,13.8,19.6];
+
+const totalLatency = [532.6,282.8,531.4,532.5,544.8,279.9,528.6,551.0,513.0,275.8,532.9,521.7,505.6,280.1,542.6,516.3,537.6,306.8,534.2,529.0,521.0,424.3,515.4,518.8,516.8,267.5,529.0,519.8,531.7,563.3,506.9,517.5,522.4,383.7,549.3,532.6,520.0,405.0,526.8,526.3,529.5,257.4,514.6,517.6,542.6,474.7,532.7,512.7,521.8,232.3,514.6,522.2,521.2,373.7,507.3,524.2,547.5,245.8,530.6,513.7,574.8,281.5,543.1,536.0,540.7,596.7,520.4,517.6,521.6,242.6,523.5,519.7,539.3,238.6,537.5,501.0,505.6,357.9,519.8,538.6,532.2,391.5,517.9,520.7,505.3,6227.3,543.6,554.4,544.8,382.4,515.2,507.2,522.7,427.2,526.6,548.3,539.8,329.3,540.6,536.4];
+
+// ─── CHARTS ─────────────────────────────────────────────────────────────────
+
+// Overview: Cluster donut
+new Chart(document.getElementById('clusterChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['C1: Faithfulness (6)', 'C2: Answer Rel. (1)', 'C3: Context Prec. (2)', 'C4: Context Rec. (1)'],
+    datasets: [{data:[6,1,2,1], backgroundColor:[COLORS.red,COLORS.yellow,COLORS.purple,COLORS.blue], borderWidth:0}]
+  },
+  options: { plugins:{ legend:{position:'bottom',labels:{boxWidth:12,font:{size:11}}} }, cutout:'65%' }
+});
+
+// Overview: Judge distribution
+new Chart(document.getElementById('judgeDistChart'), {
+  type: 'bar',
+  data: {
+    labels: ['A wins','B wins','Tie'],
+    datasets: [
+      {label:'Human', data:[8,1,1], backgroundColor:COLORS.blue+'99'},
+      {label:'Judge', data:[6,1,3], backgroundColor:COLORS.indigo+'99'}
+    ]
+  },
+  options: { plugins:{legend:{position:'bottom'}}, scales:{y:{beginAtZero:true,max:10,ticks:{stepSize:2}}} }
+});
+
+// Overview: Attack types
+new Chart(document.getElementById('attackOverviewChart'), {
+  type: 'bar',
+  data: {
+    labels: ['DAN','Roleplay','Split','Encoding','Indirect'],
+    datasets: [
+      {label:'Blocked', data:[5,5,3,3,2], backgroundColor:COLORS.green+'99'},
+      {label:'Passed', data:[0,0,0,0,2], backgroundColor:COLORS.red+'99'}
+    ]
+  },
+  options: { plugins:{legend:{position:'bottom'}}, scales:{x:{stacked:true},y:{stacked:true,beginAtZero:true,max:6}} }
+});
+
+// Phase A: Radar
+new Chart(document.getElementById('radarChart'), {
+  type: 'radar',
+  data: {
+    labels: ['Faithfulness','Answer Relevancy','Context Precision','Context Recall'],
+    datasets: [
+      {label:'Actual', data:[0.720,0.760,0.892,0.865], backgroundColor:'rgba(99,102,241,.2)', borderColor:COLORS.indigo, pointBackgroundColor:COLORS.indigo},
+      {label:'Target', data:[0.85,0.80,0.70,0.75], backgroundColor:'rgba(34,197,94,.1)', borderColor:COLORS.green, pointBackgroundColor:COLORS.green, borderDash:[4,4]}
+    ]
+  },
+  options: { scales:{r:{min:0,max:1,ticks:{stepSize:.2,font:{size:10}}}}, plugins:{legend:{position:'bottom'}} }
+});
+
+// Phase A: Cluster detail
+new Chart(document.getElementById('clusterDetailChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['C1: Faithfulness (6q)','C2: Answer Rel. (1q)','C3: Context Prec. (2q)','C4: Context Rec. (1q)','OK (23q)'],
+    datasets: [{data:[6,1,2,1,23], backgroundColor:[COLORS.red,COLORS.yellow,COLORS.purple,COLORS.blue,'#2e3147'], borderWidth:0}]
+  },
+  options: { plugins:{legend:{display:false}}, cutout:'60%' }
+});
+
+// Phase A: Faithfulness bar
+new Chart(document.getElementById('faithfulnessChart'), {
+  type: 'bar',
+  data: {
+    labels: ragasData.questions,
+    datasets: [
+      {label:'Faithfulness', data:ragasData.faithfulness, backgroundColor: ragasData.faithfulness.map(v=>v<0.5?COLORS.red+'cc':v<0.85?COLORS.yellow+'cc':COLORS.green+'cc'), borderWidth:0},
+      {label:'Target (0.85)', data:Array(33).fill(0.85), type:'line', borderColor:COLORS.green, borderDash:[4,4], pointRadius:0, fill:false}
+    ]
+  },
+  options: { plugins:{legend:{position:'bottom'}}, scales:{y:{min:0,max:1.05,ticks:{stepSize:.2}}} }
+});
+
+// Phase B: Kappa comparison
+new Chart(document.getElementById('kappaChart'), {
+  type: 'bar',
+  data: {
+    labels: ['A (RAG wins)','B (raw context)','Tie'],
+    datasets: [
+      {label:'Human Labels', data:[8,1,1], backgroundColor:COLORS.blue+'99'},
+      {label:'Judge Labels', data:[6,1,3], backgroundColor:COLORS.purple+'99'}
+    ]
+  },
+  options: { plugins:{legend:{position:'bottom'}}, scales:{y:{beginAtZero:true,max:10,ticks:{stepSize:1}}} }
+});
+
+// Phase B: Absolute scores radar
+new Chart(document.getElementById('absScoresChart'), {
+  type: 'radar',
+  data: {
+    labels: ['Accuracy','Relevance','Conciseness','Helpfulness'],
+    datasets: [{
+      label:'Average Score',
+      data: [
+        (absoluteScores.reduce((s,r)=>s+r.acc,0)/10).toFixed(2),
+        (absoluteScores.reduce((s,r)=>s+r.rel,0)/10).toFixed(2),
+        (absoluteScores.reduce((s,r)=>s+r.con,0)/10).toFixed(2),
+        (absoluteScores.reduce((s,r)=>s+r.help,0)/10).toFixed(2),
+      ],
+      backgroundColor:'rgba(99,102,241,.2)',borderColor:COLORS.indigo,pointBackgroundColor:COLORS.indigo
+    }]
+  },
+  options: { scales:{r:{min:0,max:5,ticks:{stepSize:1}}}, plugins:{legend:{position:'bottom'}} }
+});
+
+// Phase B: Pairwise pie (30 questions judged)
+new Chart(document.getElementById('pairwiseChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['A wins (RAG)','B wins (raw)','Tie'],
+    datasets: [{data:[21,3,6], backgroundColor:[COLORS.blue,COLORS.red,COLORS.muted], borderWidth:0}]
+  },
+  options: { plugins:{legend:{position:'bottom',labels:{boxWidth:12}}}, cutout:'55%' }
+});
+
+// Populate abs scores table
+const tbl = document.getElementById('absScoresTable');
+absoluteScores.forEach((r,i) => {
+  const tr = document.createElement('tr');
+  const overall = r.overall;
+  const cls = overall>=4?'green':overall>=3?'yellow':'red';
+  tr.innerHTML = `<td>${i+1}</td><td style="font-size:11px;color:var(--muted)">${r.q}</td><td>${r.acc}</td><td>${r.rel}</td><td>${r.con}</td><td>${r.help}</td><td class="${cls}">${overall.toFixed(2)}</td>`;
+  tbl.appendChild(tr);
+});
+
+// Phase C: Latency per layer (sample 30 requests)
+const l1Sample = latencyData.slice(0,30);
+const totalSample = totalLatency.slice(0,30);
+const l3Sample = totalSample.map((t,i) => l1Sample[i] > 100 ? 0 : t - l1Sample[i]);
+new Chart(document.getElementById('latencyChart'), {
+  type: 'line',
+  data: {
+    labels: Array.from({length:30},(_,i)=>`R${i+1}`),
+    datasets: [
+      {label:'L1 Input Guard (ms)', data:l1Sample, borderColor:COLORS.red, backgroundColor:'transparent', pointRadius:3, tension:.3},
+      {label:'L3 Output Guard (ms)', data:l3Sample, borderColor:COLORS.blue, backgroundColor:'transparent', pointRadius:3, tension:.3},
+      {label:'Total (ms)', data:totalSample, borderColor:COLORS.indigo, backgroundColor:'transparent', pointRadius:2, tension:.3, borderDash:[4,4]}
+    ]
+  },
+  options: {
+    plugins:{legend:{position:'bottom'}},
+    scales:{
+      y:{beginAtZero:true, ticks:{callback:v=>v>1000?`${(v/1000).toFixed(1)}s`:`${v}ms`}},
+      x:{ticks:{maxRotation:0,font:{size:9}}}
+    }
+  }
+});
+
+// Phase C: Latency histogram (L1 warm only)
+const warmL1 = latencyData.filter(v=>v<100);
+const bins = [0,10,15,20,25,30,50,100];
+const binLabels = ['0-10','10-15','15-20','20-25','25-30','30-50','50-100'];
+const binCounts = binLabels.map((_,i)=>warmL1.filter(v=>v>=bins[i]&&v<bins[i+1]).length);
+new Chart(document.getElementById('latencyBoxChart'), {
+  type:'bar',
+  data:{
+    labels:binLabels,
+    datasets:[{label:'Request count (warm L1)',data:binCounts,backgroundColor:COLORS.indigo+'99',borderWidth:0}]
+  },
+  options:{plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,title:{display:true,text:'Count'}}}}
+});
+
+// Phase D: Cost pie
+new Chart(document.getElementById('costChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['LLM API (GPT-4o-mini)','Embedding API','Qdrant Cloud','Compute (guardrails)','Monitoring'],
+    datasets: [{data:[180,45,80,60,21], backgroundColor:[COLORS.indigo,COLORS.blue,COLORS.purple,COLORS.yellow,COLORS.muted], borderWidth:0}]
+  },
+  options: {
+    plugins:{
+      legend:{position:'bottom',labels:{boxWidth:12,font:{size:11}}},
+      tooltip:{callbacks:{label:ctx=>`${ctx.label}: $${ctx.parsed}/mo`}}
+    },
+    cutout:'55%'
+  }
+});
+</script>
+</body>
+</html>
