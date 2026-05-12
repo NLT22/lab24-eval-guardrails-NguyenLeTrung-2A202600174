@@ -103,7 +103,7 @@ See [phase-d/blueprint.md](phase-d/blueprint.md) — includes SLO table (7 metri
 
 *(Record a 5-minute demo showing: RAGAS live on 5 questions, LLM-Judge comparison, 3 adversarial attacks blocked, latency benchmark P50/P95/P99)*
 
-Add YouTube link here after recording.
+https://youtu.be/rfvz6LBXR7w
 
 ## Notes
 
