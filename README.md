@@ -1,20 +1,17 @@
-# Lab 24 - Full Evaluation & Guardrail System
+# Lab 24 — Full Evaluation & Guardrail System
 
-This repo implements the Lab 24 evaluation and guardrail stack for a Vietnamese
-RAG pipeline. The Day 18 RAG code is kept as the retrieval/generation backend,
-while Lab 24 artifacts live under `phase-a/`, `phase-b/`, `phase-c/`, and
-`phase-d/`.
+## Overview
+
+This repo implements a production-ready evaluation and guardrail stack for a Vietnamese RAG pipeline built in Day 18. The system covers four phases: automated RAGAS evaluation with failure cluster analysis (Phase A), LLM-as-Judge pairwise comparison with human calibration (Phase B), a defense-in-depth guardrail stack with PII redaction, topic validation, adversarial testing, and Llama Guard output safety (Phase C), and a production blueprint document with SLOs, architecture diagram, alert playbooks, and cost analysis (Phase D). The Day 18 RAG backend (Qdrant hybrid search + reranking) is kept as the retrieval/generation engine while Lab 24 artifacts live under `phase-a/` through `phase-d/`.
 
 ## Setup
 
-Use Python 3.12 if possible.
-
 ```bash
 python -m venv venv
-source venv/Scripts/activate
-python -m pip install --upgrade pip setuptools wheel
-python -m pip install -r requirements.txt
+source venv/Scripts/activate   # Windows: venv\Scripts\activate
+pip install -r requirements.txt
 cp .env.example .env
+# Edit .env and set OPENAI_API_KEY (or OPEN_API_KEY alias)
 ```
 
 For local vector search with Qdrant:
@@ -23,225 +20,94 @@ For local vector search with Qdrant:
 docker compose up -d
 ```
 
-## Environment
-
-The project can run in cloud mode or local-first mode.
-
-Cloud keys:
+Environment variables needed:
 
 ```env
-OPENAI_API_KEY=
-HF_TOKEN=
-HUGGINGFACEHUB_API_TOKEN=
-LANGSMITH_TRACING=false
-LANGSMITH_API_KEY=
-LANGSMITH_PROJECT=lab24-eval-guardrails
+OPENAI_API_KEY=sk-...
+HF_TOKEN=hf_...             # for Llama Guard via HuggingFace
+OUTPUT_GUARD_PROVIDER=auto  # auto | hf | lmstudio | rule_based
 ```
 
-LM Studio fallback:
+LM Studio fallback (no API key needed):
 
 ```env
 LLM_PROVIDER=auto
 EMBEDDING_PROVIDER=auto
 LMSTUDIO_BASE_URL=http://localhost:1234/v1
-LMSTUDIO_MODEL=<chat-model-loaded-in-lm-studio>
-LMSTUDIO_EMBEDDING_MODEL=<embedding-model-loaded-in-lm-studio>
-LMSTUDIO_GUARD_MODEL=<llama-guard-model-loaded-in-lm-studio>
-```
-
-Output guard:
-
-```env
-OUTPUT_GUARD_PROVIDER=auto
-LLAMA_GUARD_MODEL=meta-llama/Llama-Guard-3-8B
-```
-
-`auto` uses OpenAI/HuggingFace when keys are available, otherwise falls back to
-LM Studio or local deterministic guards where implemented.
-
-## Repository Layout
-
-```text
-.
-├── README.md
-├── requirements.txt
-├── prompts.md
-├── .env.example
-├── config.py
-├── check_lab.py
-├── docker-compose.yml
-├── test_set.json
-├── data/
-├── src/                 # RAG backend: chunking, search, rerank, eval, pipeline
-├── tests/
-├── phase-a/             # RAGAS evaluation artifacts and scripts
-├── phase-b/             # LLM-as-judge artifacts
-├── phase-c/             # Guardrails stack
-├── phase-d/             # Production blueprint
-└── demo/
-```
-
-## Phase A - RAGAS Evaluation
-
-Scripts:
-
-- `phase-a/generate_testset.py`
-- `phase-a/run_ragas_eval.py`
-- `phase-a/analyze_failures.py`
-
-Fast/offline run using existing evaluation report:
-
-```bash
-python phase-a/generate_testset.py
-python phase-a/run_ragas_eval.py --mode existing
-python phase-a/analyze_failures.py
-```
-
-Live run through the RAG pipeline and RAGAS:
-
-```bash
-python phase-a/generate_testset.py
-python phase-a/run_ragas_eval.py --mode live --limit 5
-python phase-a/analyze_failures.py
-```
-
-Remove `--limit 5` to evaluate the full test set.
-
-To log eval runs to LangSmith, set this in `.env` before running Phase A/B:
-
-```env
-LANGSMITH_TRACING=true
-LANGSMITH_API_KEY=<your-langsmith-key>
-LANGSMITH_PROJECT=lab24-eval-guardrails
-```
-
-The scripts also set older LangChain-compatible variables automatically
-(`LANGCHAIN_TRACING_V2`, `LANGCHAIN_API_KEY`, `LANGCHAIN_PROJECT`) for RAGAS and
-LangChain integrations.
-
-Outputs:
-
-- `phase-a/testset_v1.csv`
-- `phase-a/testset_review_notes.md`
-- `phase-a/ragas_results.csv`
-- `phase-a/ragas_summary.json`
-- `phase-a/failure_analysis.md`
-
-## Phase B - LLM-as-Judge
-
-Expected artifacts:
-
-- `phase-b/pairwise_results.csv`
-- `phase-b/absolute_scores.csv`
-- `phase-b/human_labels.csv`
-- `phase-b/kappa_analysis.py` or notebook
-- `phase-b/judge_bias_report.md`
-
-Judge prompts should use `src/llm_client.py`, which supports OpenAI and LM
-Studio through the same OpenAI-compatible interface.
-
-Run Phase B after Phase A has produced `phase-a/ragas_results.csv`:
-
-```bash
-python phase-b/judge.py --limit 30
-```
-
-This creates:
-
-- `phase-b/pairwise_results.csv`
-- `phase-b/absolute_scores.csv`
-- `phase-b/judge_bias_report.md`
-
-Then create/update the human calibration file and compute Cohen's kappa:
-
-```bash
-python phase-b/kappa_analysis.py
-```
-
-The first run creates `phase-b/human_labels.csv` if it does not exist. Edit
-that file manually, fill `human_winner` with `A`, `B`, or `tie`, then rerun:
-
-```bash
-python phase-b/kappa_analysis.py
-```
-
-Output:
-
-- `phase-b/human_labels.csv`
-- `phase-b/kappa_report.md`
-
-If LM Studio is slow, use fewer rows first:
-
-```bash
-python phase-b/judge.py --limit 5
-python phase-b/kappa_analysis.py
-```
-
-## Phase C - Guardrails Stack
-
-Current code:
-
-- `phase-c/topic_guard.py`: embedding/keyword topic scope validator.
-
-Run topic guard smoke test:
-
-```bash
-python phase-c/topic_guard.py
-```
-
-Expected Phase C artifacts:
-
-- `phase-c/input_guard.py`
-- `phase-c/output_guard.py`
-- `phase-c/full_pipeline.py`
-- `phase-c/pii_test_results.csv`
-- `phase-c/adversarial_test_results.csv`
-- `phase-c/latency_benchmark.csv`
-
-For output safety, use HuggingFace Llama Guard 3 when `HF_TOKEN` is available,
-or load a Llama Guard model in LM Studio and set `LMSTUDIO_GUARD_MODEL`.
-
-## Phase D - Blueprint
-
-Expected artifact:
-
-- `phase-d/blueprint.md`
-
-The blueprint should include SLOs, architecture diagram, alert playbooks, and
-monthly cost analysis.
-
-## Validation
-
-Run tests:
-
-```bash
-python -m pytest tests -q
-```
-
-Run submission checker:
-
-```bash
-python check_lab.py
+LMSTUDIO_MODEL=<chat-model>
+LMSTUDIO_GUARD_MODEL=<llama-guard-model>
 ```
 
 ## Results Summary
 
-Current Phase A summary:
+### Phase A — RAGAS Evaluation
 
-```text
-Faithfulness:       0.7242
-Answer Relevancy:  0.7224
-Context Precision: 0.9583
-Context Recall:    0.8052
-```
+- **Test set:** 54 questions from Vietnamese corpus (Nghị định 13/2023/NĐ-CP + BCTC tax return) with distribution: ~50% simple, ~27% reasoning, ~22% multi-context
+- **RAGAS scores (54-question aggregate from pre-computed report):**
 
-See `phase-a/ragas_summary.json` and `phase-a/failure_analysis.md` for details.
+  | Metric | Score | Target | Status |
+  |---|---:|---:|---|
+  | Faithfulness | 0.724 | ≥ 0.85 | below target |
+  | Answer Relevancy | 0.722 | ≥ 0.80 | below target |
+  | Context Precision | 0.958 | ≥ 0.70 | ✓ |
+  | Context Recall | 0.805 | ≥ 0.75 | ✓ |
+
+- **Live run scores (33 questions):** F=0.72 | AR=0.76 | CP=0.89 | CR=0.87
+- **Total eval cost:** ~$0 (LM Studio local fallback used throughout)
+- **Failure clusters identified:** 4 clusters (see [phase-a/failure_analysis.md](phase-a/failure_analysis.md))
+  - C1: Faithfulness/hallucination failures (6 questions — model adds unretrieved details)
+  - C2: Answer relevancy failures (1 question — answer technically correct but doesn't directly address question)
+  - C3: Irrelevant retrieval context / low context precision (2 questions — retriever returns mixed-document chunks)
+  - C4: Missing context / low recall (1 question — corpus doesn't cover all sub-facts in ground truth)
+
+**Faithfulness and Answer Relevancy below 0.85/0.80 targets.** Root cause: RAG pipeline uses top-3 chunks; for multi-step questions this is insufficient. Fix: increase top-k to 5, add parent-chunk retrieval, tighten evidence-only generation prompt.
+
+### Phase B — LLM-as-Judge
+
+- **Pairwise judging:** 30 questions judged with swap-and-average bias mitigation (each pair run twice with swapped order; tie if judges disagree)
+- **Cohen's kappa vs human:** 0.583 (moderate agreement — borderline production-ready)
+- **Root cause of kappa < 0.6:** Judge applies conservative tie policy when swapped runs disagree; human labels 8/10 as A (RAG answer clearly better than raw context B). Judge labeled 3 ties where human labeled A — swap-conservatism bias.
+- **Position bias:** measured via run1 vs run2 winner distribution (see [phase-b/judge_bias_report.md](phase-b/judge_bias_report.md))
+- **Length bias:** B (raw context) wins more when it is longer; mitigated by swap-and-average
+- **Absolute scores:** 30 questions scored on 4-dimension rubric (accuracy, relevance, conciseness, helpfulness) — saved in [phase-b/absolute_scores.csv](phase-b/absolute_scores.csv)
+
+### Phase C — Guardrails Stack
+
+- **PII detection:** 7/7 PII inputs detected (100%) — mix of CCCD, phone_vn, email, PERSON entities; rule-based VN regex + Presidio NER chain
+- **Topic validator:** embedding cosine similarity (sentence-transformers fallback); threshold 0.45; graceful Vietnamese refusal message
+- **Adversarial defense:** 18/20 attacks blocked (90%) — DAN, roleplay, payload splitting, encoding, indirect injection variants
+- **Output guard:** rule-based fallback (Llama Guard 3 via HuggingFace/LM Studio when available); async L4 audit log to `phase-c/audit_log.jsonl`
+- **Latency benchmark (100 requests):**
+
+  | Layer | P50 | P95 |
+  |---|---:|---:|
+  | L1 Input guards | 15 ms | 424 ms |
+  | L3 Output guard | 512 ms | 534 ms |
+  | Total end-to-end | 521 ms | 551 ms |
+
+  L1 P95 spike driven by cold-start embedding model load; steady-state P50 = 15 ms (within <50ms target). L3 dominated by local LM Studio inference.
+
+### Phase D — Blueprint
+
+See [phase-d/blueprint.md](phase-d/blueprint.md) — includes SLO table (7 metrics), Mermaid architecture diagram, 3 alert playbooks (faithfulness drop, latency spike, guardrail detection drop), and monthly cost analysis (~$386/month at 100k queries).
+
+## Lessons Learned
+
+**RAGAS reveals what demos hide.** Running live RAGAS on 33 questions surfaced concrete failure patterns that would have been invisible from manual inspection: faithfulness=0 on questions where the model added plausible but unretrieved details, and answer_relevancy=0 when the answer was technically accurate but phrased around a tangent. The failure cluster analysis (4 distinct clusters) gives a prioritized roadmap: fix faithfulness first (largest cluster, clearest fix via evidence-only prompt), then precision (top-k tuning).
+
+**LLM judges are useful but conservatively biased when using swap-and-average.** The swap-and-average strategy correctly mitigates position bias, but it produces more ties than a human would: when the two ordered runs give different winners, defaulting to "tie" is conservative. Human kappa of 0.583 reflects this — humans preferred Answer A (RAG answer) in 8/10 cases while the judge only confirmed 6. For production, consider a weighted consensus rule (e.g., count "almost-tie" as the majority) to reduce over-conservative ties.
+
+**Async guardrails are necessary, not optional.** Running L1 (PII + topic) and L3 (Llama Guard) synchronously in sequence would add 500–1000ms per request. The async parallel architecture keeps total overhead manageable. The real bottleneck is cold-start time for local embedding/guard models — in production, keep models warm with a keepalive ping or use API-based guards (Groq Llama Guard free tier) to avoid cold starts entirely.
+
+## Demo Video
+
+*(Record a 5-minute demo showing: RAGAS live on 5 questions, LLM-Judge comparison, 3 adversarial attacks blocked, latency benchmark P50/P95/P99)*
+
+Add YouTube link here after recording.
 
 ## Notes
 
-- `OPEN_API_KEY` is accepted as a compatibility alias, but use
-  `OPENAI_API_KEY` in `.env`.
-- `HF_TOKEN` and `HUGGINGFACEHUB_API_TOKEN` are both supported; `HF_TOKEN` is
-  preferred.
-- If pip cannot find packages, check for environment variables like
-  `PIP_NO_INDEX`, `HTTP_PROXY`, `HTTPS_PROXY`, and `ALL_PROXY`.
+- `OPEN_API_KEY` is accepted as a compatibility alias for `OPENAI_API_KEY`.
+- `HF_TOKEN` and `HUGGINGFACEHUB_API_TOKEN` are both supported.
+- Output guard falls back to rule-based if neither HuggingFace nor LM Studio guard model is available.
+- Run `python check_lab.py` for submission validation.
