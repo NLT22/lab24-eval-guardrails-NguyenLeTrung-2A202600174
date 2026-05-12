@@ -1,0 +1,11 @@
+question_id,question,human_winner,confidence,notes
+1,Mã số thuế của CÔNG TY CỔ PHẦN DHA SURFACES là bao nhiêu?,A,high,A trả lời thẳng mã số 0106769437; B là raw context dài dòng chứa nhiều thông tin không liên quan.
+2,Thuế giá trị gia tăng phát sinh trong kỳ Quý 4 năm 2024 của CÔNG TY CỔ PHẦN DHA SURFACES là bao nhiêu?,A,medium,A cung cấp con số 129.511.633 rõ ràng; B là bảng raw context có chứa số nhưng cần tự đọc tìm. Judge cho tie vì swap inconsistent.
+3,"Theo Nghị định 13/2023/NĐ-CP, sự im lặng của chủ thể dữ liệu có được coi là sự đồng ý xử lý dữ liệu cá nhân không?",A,high,A trả lời trực tiếp và chính xác; B là đoạn văn bản thô cần đọc kỹ mới hiểu.
+4,Nghị định 13/2023/NĐ-CP quy định thời hạn thực hiện yêu cầu hạn chế xử lý dữ liệu cá nhân là bao lâu?,A,high,A trả lời 72 giờ ngắn gọn; B là raw context mặc dù cũng có con số nhưng không được highlight.
+5,Dữ liệu cá nhân nhạy cảm theo Nghị định 13/2023/NĐ-CP gồm những loại thông tin nào?,A,medium,A trả lời đủ nhưng chỉ đề cập quan điểm chính trị làm ví dụ; B là raw context có nội dung đầy đủ hơn nhưng không được tổng hợp.
+6,Tên công ty nộp tờ khai thuế GTGT Quý 4 năm 2024 là gì?,A,high,A trả lời trực tiếp tên công ty; B là raw context chứa tên nhưng kèm nhiều field không liên quan.
+7,Kỳ tính thuế của tờ khai GTGT trong file bctc.md là gì?,B,medium,A trả lời Không tìm thấy thông tin - RAG thất bại; B là raw context có chứa thông tin kỳ tính thuế dù phải tự tìm.
+8,Tờ khai thuế GTGT trong file bctc.md được nộp lần đầu hay không?,tie,low,A trả lời Không tìm thấy thông tin; B là raw context về dữ liệu cá nhân không liên quan. Cả hai đều không trả lời đúng câu hỏi.
+9,Người ký tờ khai thuế GTGT Quý 4 năm 2024 là ai?,A,high,A trả lời Trịnh Thị Sang rõ ràng; B là raw context có tên nhưng lẫn với nhiều thông tin khác. Judge cho tie nhưng A rõ ràng tốt hơn.
+10,Tờ khai thuế GTGT trong bctc.md áp dụng theo mẫu số nào?,A,high,A trả lời Mẫu số 01/GTGT ngắn gọn; B là raw context đầu trang có thông tin nhưng verbose.

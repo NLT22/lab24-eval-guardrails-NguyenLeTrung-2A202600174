@@ -1,0 +1,218 @@
+[
+  {
+    "question": "Mã số thuế của CÔNG TY CỔ PHẦN DHA SURFACES là bao nhiêu?",
+    "ground_truth": "Mã số thuế của CÔNG TY CỔ PHẦN DHA SURFACES là 0106769437."
+  },
+  {
+    "question": "Thuế giá trị gia tăng phát sinh trong kỳ Quý 4 năm 2024 của CÔNG TY CỔ PHẦN DHA SURFACES là bao nhiêu?",
+    "ground_truth": "Thuế giá trị gia tăng phát sinh trong kỳ Quý 4 năm 2024 của CÔNG TY CỔ PHẦN DHA SURFACES là 129.511.633 đồng (chỉ tiêu [36])."
+  },
+  {
+    "question": "Theo Nghị định 13/2023/NĐ-CP, sự im lặng của chủ thể dữ liệu có được coi là sự đồng ý xử lý dữ liệu cá nhân không?",
+    "ground_truth": "Không. Theo khoản 6 Điều 11 Nghị định 13/2023/NĐ-CP, sự im lặng hoặc không phản hồi của chủ thể dữ liệu không được coi là sự đồng ý."
+  },
+  {
+    "question": "Nghị định 13/2023/NĐ-CP quy định thời hạn thực hiện yêu cầu hạn chế xử lý dữ liệu cá nhân là bao lâu?",
+    "ground_truth": "Theo khoản 6 Điều 9 Nghị định 13/2023/NĐ-CP, việc hạn chế xử lý dữ liệu được thực hiện trong 72 giờ sau khi có yêu cầu của chủ thể dữ liệu, với toàn bộ dữ liệu cá nhân mà chủ thể dữ liệu yêu cầu hạn chế."
+  },
+  {
+    "question": "Dữ liệu cá nhân nhạy cảm theo Nghị định 13/2023/NĐ-CP gồm những loại thông tin nào?",
+    "ground_truth": "Theo khoản 4 Điều 2 Nghị định 13/2023/NĐ-CP, dữ liệu cá nhân nhạy cảm bao gồm: quan điểm chính trị, tôn giáo; tình trạng sức khỏe và đời tư trong hồ sơ bệnh án (không bao gồm nhóm máu); thông tin về nguồn gốc chủng tộc, dân tộc; đặc điểm di truyền; thuộc tính vật lý và đặc điểm sinh học; đời sống tình dục và xu hướng tình dục; dữ liệu về tội phạm và hành vi phạm tội; thông tin khách hàng của tổ chức tín dụng; dữ liệu vị trí cá nhân qua dịch vụ định vị; và dữ liệu cá nhân khác được pháp luật quy định là đặc thù cần biện pháp bảo mật."
+  },
+  {
+    "question": "Tên công ty nộp tờ khai thuế GTGT Quý 4 năm 2024 là gì?",
+    "ground_truth": "Tên công ty nộp tờ khai thuế GTGT Quý 4 năm 2024 là CÔNG TY CỔ PHẦN DHA SURFACES."
+  },
+  {
+    "question": "Kỳ tính thuế của tờ khai GTGT trong file bctc.md là gì?",
+    "ground_truth": "Kỳ tính thuế là Quý 4 năm 2024."
+  },
+  {
+    "question": "Tờ khai thuế GTGT trong file bctc.md được nộp lần đầu hay không?",
+    "ground_truth": "Tờ khai được nộp lần đầu, thể hiện qua chỉ tiêu [02] Lần đầu: [1]."
+  },
+  {
+    "question": "Người ký tờ khai thuế GTGT Quý 4 năm 2024 là ai?",
+    "ground_truth": "Người ký tờ khai là TRỊNH THỊ SANG, đại diện hợp pháp của CÔNG TY CỔ PHẦN DHA SURFACES, ký điện tử ngày 24 tháng 01 năm 2025."
+  },
+  {
+    "question": "Tờ khai thuế GTGT trong bctc.md áp dụng theo mẫu số nào?",
+    "ground_truth": "Tờ khai áp dụng theo Mẫu số 01/GTGT, dành cho người nộp thuế thực hiện phương pháp khấu trừ cho hoạt động sản xuất kinh doanh."
+  },
+  {
+    "question": "Thuế giá trị gia tăng được khấu trừ (chỉ tiêu [22]) trong kỳ Quý 4 năm 2024 là bao nhiêu?",
+    "ground_truth": "Thuế giá trị gia tăng được khấu trừ (chỉ tiêu [22]) là 77.377.803 đồng."
+  },
+  {
+    "question": "Giá trị hàng hóa, dịch vụ bán ra chịu thuế suất 10% (chỉ tiêu [32]) là bao nhiêu?",
+    "ground_truth": "Giá trị hàng hóa, dịch vụ bán ra chịu thuế suất 10% (chỉ tiêu [32]) là 344.675.400 đồng."
+  },
+  {
+    "question": "Tổng doanh thu hàng hóa, dịch vụ bán ra trong kỳ (chỉ tiêu [26]) là bao nhiêu?",
+    "ground_truth": "Tổng giá trị hàng hóa, dịch vụ bán ra trong kỳ (chỉ tiêu [26]) là 2.405.743.421 đồng."
+  },
+  {
+    "question": "Giá trị hàng hóa, dịch vụ bán ra chịu thuế GTGT (chỉ tiêu [29]) là bao nhiêu?",
+    "ground_truth": "Giá trị hàng hóa, dịch vụ bán ra chịu thuế GTGT (chỉ tiêu [29]) là 3.703.688.610 đồng."
+  },
+  {
+    "question": "Thuế GTGT đề nghị hoàn (chỉ tiêu [42]) trong kỳ Quý 4 năm 2024 là bao nhiêu?",
+    "ground_truth": "Thuế GTGT đề nghị hoàn (chỉ tiêu [42]) là 0 đồng."
+  },
+  {
+    "question": "Thuế GTGT còn được khấu trừ chuyển sang kỳ sau (chỉ tiêu [43]) là bao nhiêu?",
+    "ground_truth": "Thuế GTGT còn được khấu trừ chuyển sang kỳ sau (chỉ tiêu [43]) là 0 đồng, theo công thức [43] = [41] - [42]."
+  },
+  {
+    "question": "Giá trị hàng hóa, dịch vụ bán ra không chịu thuế GTGT (chỉ tiêu [27]) là bao nhiêu?",
+    "ground_truth": "Giá trị hàng hóa, dịch vụ bán ra không chịu thuế GTGT (chỉ tiêu [27]) là 0 đồng."
+  },
+  {
+    "question": "Giá trị hàng hóa, dịch vụ bán ra chịu thuế suất 5% (chỉ tiêu [31]) là bao nhiêu?",
+    "ground_truth": "Giá trị hàng hóa, dịch vụ bán ra chịu thuế suất 5% (chỉ tiêu [31]) là 0 đồng."
+  },
+  {
+    "question": "Tờ khai thuế GTGT bctc.md được ký và nộp vào ngày nào?",
+    "ground_truth": "Tờ khai được ký và nộp vào ngày 24 tháng 01 năm 2025."
+  },
+  {
+    "question": "Thuế GTGT phát sinh trong kỳ (129.511.633 đồng) và thuế GTGT được khấu trừ (77.377.803 đồng) chênh lệch bao nhiêu?",
+    "ground_truth": "Chênh lệch giữa thuế GTGT phát sinh ([36] = 129.511.633 đồng) và thuế GTGT được khấu trừ ([22] = 77.377.803 đồng) là 52.133.830 đồng. Tuy nhiên, thuế phải nộp trong kỳ ([41]) ghi nhận là 0, cho thấy có thể còn khoản khấu trừ khác hoặc điều chỉnh bù trừ."
+  },
+  {
+    "question": "Tổng doanh thu và thuế GTGT hàng hóa, dịch vụ bán ra (chỉ tiêu [34]) là bao nhiêu?",
+    "ground_truth": "Tổng doanh thu và thuế GTGT hàng hóa, dịch vụ bán ra (chỉ tiêu [34]) là 3.703.688.610 đồng, theo công thức [34]-[26]-[27]-[25]."
+  },
+  {
+    "question": "Nghị định 13/2023/NĐ-CP được ban hành vào ngày tháng năm nào?",
+    "ground_truth": "Nghị định 13/2023/NĐ-CP được ban hành ngày 17 tháng 4 năm 2023 tại Hà Nội."
+  },
+  {
+    "question": "Cơ quan chuyên trách bảo vệ dữ liệu cá nhân theo Nghị định 13/2023/NĐ-CP là cơ quan nào?",
+    "ground_truth": "Theo Điều 29 Nghị định 13/2023/NĐ-CP, cơ quan chuyên trách bảo vệ dữ liệu cá nhân là Cục An ninh mạng và phòng, chống tội phạm sử dụng công nghệ cao - Bộ Công an."
+  },
+  {
+    "question": "Theo Nghị định 13/2023/NĐ-CP, dữ liệu cá nhân là gì?",
+    "ground_truth": "Theo khoản 1 Điều 2, dữ liệu cá nhân là thông tin dưới dạng ký hiệu, chữ viết, chữ số, hình ảnh, âm thanh hoặc dạng tương tự trên môi trường điện tử gắn liền với một con người cụ thể hoặc giúp xác định một con người cụ thể, bao gồm dữ liệu cá nhân cơ bản và dữ liệu cá nhân nhạy cảm."
+  },
+  {
+    "question": "Chủ thể dữ liệu là gì theo Nghị định 13/2023/NĐ-CP?",
+    "ground_truth": "Theo khoản 6 Điều 2, chủ thể dữ liệu là cá nhân được dữ liệu cá nhân phản ánh."
+  },
+  {
+    "question": "Bên Kiểm soát dữ liệu cá nhân là gì theo Nghị định 13/2023/NĐ-CP?",
+    "ground_truth": "Theo khoản 9 Điều 2, Bên Kiểm soát dữ liệu cá nhân là tổ chức, cá nhân quyết định mục đích và phương tiện xử lý dữ liệu cá nhân."
+  },
+  {
+    "question": "Bên Xử lý dữ liệu cá nhân là gì theo Nghị định 13/2023/NĐ-CP?",
+    "ground_truth": "Theo khoản 10 Điều 2, Bên Xử lý dữ liệu cá nhân là tổ chức, cá nhân thực hiện việc xử lý dữ liệu thay mặt cho Bên Kiểm soát dữ liệu, thông qua một hợp đồng hoặc thỏa thuận với Bên Kiểm soát dữ liệu."
+  },
+  {
+    "question": "Bên thứ ba theo Nghị định 13/2023/NĐ-CP là ai?",
+    "ground_truth": "Theo khoản 12 Điều 2, Bên thứ ba là tổ chức, cá nhân ngoài Chủ thể dữ liệu, Bên Kiểm soát dữ liệu cá nhân, Bên Xử lý dữ liệu cá nhân, Bên Kiểm soát và xử lý dữ liệu cá nhân được phép xử lý dữ liệu cá nhân."
+  },
+  {
+    "question": "Nghị định 13/2023/NĐ-CP áp dụng đối với những đối tượng nào?",
+    "ground_truth": "Theo khoản 2 Điều 1, Nghị định áp dụng đối với: (a) Cơ quan, tổ chức, cá nhân Việt Nam; (b) Cơ quan, tổ chức, cá nhân nước ngoài tại Việt Nam; (c) Cơ quan, tổ chức, cá nhân Việt Nam hoạt động tại nước ngoài; (d) Cơ quan, tổ chức, cá nhân nước ngoài trực tiếp tham gia hoặc có liên quan đến hoạt động xử lý dữ liệu cá nhân tại Việt Nam."
+  },
+  {
+    "question": "Điều 8 Nghị định 13/2023/NĐ-CP nghiêm cấm những hành vi nào?",
+    "ground_truth": "Điều 8 nghiêm cấm: (1) Xử lý dữ liệu cá nhân trái quy định pháp luật; (2) Xử lý dữ liệu cá nhân để tạo thông tin chống lại Nhà nước Việt Nam; (3) Xử lý dữ liệu gây ảnh hưởng tới an ninh quốc gia, trật tự an toàn xã hội; (4) Cản trở hoạt động bảo vệ dữ liệu cá nhân của cơ quan có thẩm quyền; (5) Lợi dụng hoạt động bảo vệ dữ liệu cá nhân để vi phạm pháp luật."
+  },
+  {
+    "question": "Chủ thể dữ liệu có bao nhiêu quyền theo Điều 9 Nghị định 13/2023/NĐ-CP và đó là những quyền gì?",
+    "ground_truth": "Theo Điều 9, chủ thể dữ liệu có 11 quyền: (1) Quyền được biết; (2) Quyền đồng ý; (3) Quyền truy cập; (4) Quyền rút lại sự đồng ý; (5) Quyền xóa dữ liệu; (6) Quyền hạn chế xử lý dữ liệu; (7) Quyền cung cấp dữ liệu; (8) Quyền phản đối xử lý dữ liệu; (9) Quyền khiếu nại, tố cáo, khởi kiện; (10) Quyền yêu cầu bồi thường thiệt hại; (11) Quyền tự bảo vệ."
+  },
+  {
+    "question": "Nghĩa vụ của chủ thể dữ liệu theo Điều 10 Nghị định 13/2023/NĐ-CP là gì?",
+    "ground_truth": "Theo Điều 10, chủ thể dữ liệu có nghĩa vụ: (1) Tự bảo vệ dữ liệu cá nhân của mình và yêu cầu tổ chức, cá nhân liên quan bảo vệ; (2) Tôn trọng, bảo vệ dữ liệu cá nhân của người khác; (3) Cung cấp đầy đủ, chính xác dữ liệu khi đồng ý cho phép xử lý; (4) Tham gia tuyên truyền, phổ biến kỹ năng bảo vệ dữ liệu; (5) Thực hiện quy định pháp luật về bảo vệ dữ liệu cá nhân và phòng, chống vi phạm."
+  },
+  {
+    "question": "Theo Nghị định 13/2023/NĐ-CP, thời hạn thông báo vi phạm bảo vệ dữ liệu cá nhân cho Bộ Công an là bao lâu?",
+    "ground_truth": "Theo khoản 1 Điều 23, khi phát hiện vi phạm, Bên Kiểm soát dữ liệu cá nhân phải thông báo cho Bộ Công an (Cục An ninh mạng và phòng, chống tội phạm sử dụng công nghệ cao) chậm nhất 72 giờ sau khi xảy ra vi phạm. Nếu thông báo sau 72 giờ phải kèm theo lý do thông báo chậm."
+  },
+  {
+    "question": "Sự đồng ý của chủ thể dữ liệu có hiệu lực khi nào theo Nghị định 13/2023/NĐ-CP?",
+    "ground_truth": "Theo khoản 2 Điều 11, sự đồng ý có hiệu lực khi chủ thể dữ liệu tự nguyện và biết rõ: (a) loại dữ liệu cá nhân được xử lý; (b) mục đích xử lý; (c) tổ chức, cá nhân được xử lý dữ liệu; (d) các quyền và nghĩa vụ của chủ thể dữ liệu."
+  },
+  {
+    "question": "Theo Nghị định 13/2023/NĐ-CP, dữ liệu cá nhân cơ bản gồm những thông tin nào?",
+    "ground_truth": "Theo khoản 3 Điều 2, dữ liệu cá nhân cơ bản gồm: họ tên, ngày tháng năm sinh/chết/mất tích, giới tính, nơi sinh/thường trú/tạm trú, quốc tịch, hình ảnh, số điện thoại/CMND/hộ chiếu/GPLX/biển số xe/MST cá nhân/BHXH/thẻ BHYT, tình trạng hôn nhân, thông tin quan hệ gia đình, thông tin tài khoản số và lịch sử hoạt động mạng, và các thông tin khác giúp xác định một con người cụ thể."
+  },
+  {
+    "question": "Theo Nghị định 13/2023/NĐ-CP, thời hạn cung cấp dữ liệu cá nhân khi chủ thể dữ liệu yêu cầu là bao lâu?",
+    "ground_truth": "Theo khoản 3 Điều 14, việc cung cấp dữ liệu cá nhân được thực hiện trong 72 giờ sau khi có yêu cầu của chủ thể dữ liệu, trừ trường hợp pháp luật có quy định khác."
+  },
+  {
+    "question": "Theo Điều 16 Nghị định 13/2023/NĐ-CP, thời hạn xóa dữ liệu cá nhân theo yêu cầu là bao lâu?",
+    "ground_truth": "Theo khoản 5 Điều 16, việc xóa dữ liệu được thực hiện trong 72 giờ sau khi có yêu cầu của chủ thể dữ liệu với toàn bộ dữ liệu cá nhân mà Bên Kiểm soát dữ liệu cá nhân, Bên Kiểm soát và xử lý dữ liệu cá nhân thu thập được, trừ trường hợp pháp luật có quy định khác."
+  },
+  {
+    "question": "Theo Điều 16 Nghị định 13/2023/NĐ-CP, trong những trường hợp nào việc xóa dữ liệu không được áp dụng dù chủ thể dữ liệu yêu cầu?",
+    "ground_truth": "Theo khoản 2 Điều 16, xóa dữ liệu không áp dụng khi: (a) Pháp luật không cho phép xóa; (b) Dữ liệu được cơ quan nhà nước xử lý phục vụ hoạt động của cơ quan theo pháp luật; (c) Dữ liệu đã được công khai theo quy định pháp luật; (d) Dữ liệu phục vụ yêu cầu pháp lý, nghiên cứu khoa học, thống kê; (e) Trong tình trạng khẩn cấp về quốc phòng, an ninh, thảm họa, dịch bệnh; (e) Ứng phó tình huống khẩn cấp đe dọa tính mạng, sức khỏe."
+  },
+  {
+    "question": "Theo Điều 17 Nghị định 13/2023/NĐ-CP, khi nào có thể xử lý dữ liệu cá nhân mà không cần sự đồng ý của chủ thể dữ liệu?",
+    "ground_truth": "Theo Điều 17, có thể xử lý dữ liệu không cần đồng ý trong 5 trường hợp: (1) Khẩn cấp bảo vệ tính mạng, sức khỏe chủ thể dữ liệu hoặc người khác; (2) Công khai dữ liệu theo quy định luật; (3) Cơ quan nhà nước xử lý trong tình trạng khẩn cấp quốc phòng, an ninh, thảm họa, dịch bệnh; (4) Thực hiện nghĩa vụ hợp đồng của chủ thể dữ liệu theo luật; (5) Phục vụ hoạt động cơ quan nhà nước theo luật chuyên ngành."
+  },
+  {
+    "question": "Theo Nghị định 13/2023/NĐ-CP, việc xử lý dữ liệu cá nhân của trẻ em cần điều kiện gì?",
+    "ground_truth": "Theo khoản 2 Điều 20, xử lý dữ liệu cá nhân của trẻ em phải có sự đồng ý của trẻ em trong trường hợp trẻ em từ 7 tuổi trở lên và phải có sự đồng ý của cha, mẹ hoặc người giám hộ, trừ các trường hợp quy định tại Điều 17 Nghị định này. Nguyên tắc chung là luôn bảo vệ quyền và lợi ích tốt nhất của trẻ em."
+  },
+  {
+    "question": "Theo Điều 12 Nghị định 13/2023/NĐ-CP, việc rút lại sự đồng ý có ảnh hưởng đến tính hợp pháp của việc xử lý dữ liệu đã thực hiện trước đó không?",
+    "ground_truth": "Không. Theo khoản 1 Điều 12, việc rút lại sự đồng ý không ảnh hưởng đến tính hợp pháp của việc xử lý dữ liệu đã được đồng ý trước khi rút lại sự đồng ý."
+  },
+  {
+    "question": "Khi nhận yêu cầu rút lại sự đồng ý, Bên Kiểm soát dữ liệu cá nhân có nghĩa vụ gì theo Điều 12 Nghị định 13/2023/NĐ-CP?",
+    "ground_truth": "Theo khoản 3 và 4 Điều 12, Bên Kiểm soát dữ liệu phải: (1) Thông báo cho chủ thể dữ liệu về hậu quả, thiệt hại có thể xảy ra khi rút lại sự đồng ý; (2) Sau khi rút lại sự đồng ý, phải ngừng và yêu cầu các tổ chức, cá nhân có liên quan ngừng xử lý dữ liệu của chủ thể dữ liệu."
+  },
+  {
+    "question": "Theo Điều 13 Nghị định 13/2023/NĐ-CP, nội dung thông báo xử lý dữ liệu cá nhân cho chủ thể dữ liệu bao gồm những gì?",
+    "ground_truth": "Theo khoản 2 Điều 13, nội dung thông báo gồm: (a) Mục đích xử lý; (b) Loại dữ liệu cá nhân được sử dụng; (c) Cách thức xử lý; (d) Thông tin về các tổ chức, cá nhân khác có liên quan; (e) Hậu quả, thiệt hại không mong muốn có khả năng xảy ra; (f) Thời gian bắt đầu, thời gian kết thúc xử lý dữ liệu."
+  },
+  {
+    "question": "Theo Điều 11 khoản 10 Nghị định 13/2023/NĐ-CP, khi có tranh chấp, trách nhiệm chứng minh sự đồng ý thuộc về ai?",
+    "ground_truth": "Theo khoản 10 Điều 11, trong trường hợp có tranh chấp, trách nhiệm chứng minh sự đồng ý của chủ thể dữ liệu thuộc về Bên Kiểm soát dữ liệu cá nhân, Bên Kiểm soát và xử lý dữ liệu cá nhân."
+  },
+  {
+    "question": "Theo nguyên tắc bảo vệ dữ liệu cá nhân tại Điều 3 Nghị định 13/2023/NĐ-CP, dữ liệu cá nhân có được mua bán không?",
+    "ground_truth": "Không. Theo khoản 4 Điều 3, dữ liệu cá nhân không được mua, bán dưới mọi hình thức, trừ trường hợp luật có quy định khác. Dữ liệu cá nhân thu thập phải phù hợp và giới hạn trong phạm vi, mục đích cần xử lý."
+  },
+  {
+    "question": "Theo Điều 25 Nghị định 13/2023/NĐ-CP, trong bao nhiêu ngày kể từ khi chuyển dữ liệu ra nước ngoài thành công, bên chuyển dữ liệu phải gửi hồ sơ cho Bộ Công an?",
+    "ground_truth": "Theo khoản 3 Điều 25, bên chuyển dữ liệu ra nước ngoài phải gửi 01 bản chính hồ sơ đánh giá tác động tới Bộ Công an (Cục An ninh mạng và phòng, chống tội phạm sử dụng công nghệ cao) trong thời gian 60 ngày kể từ ngày tiến hành chuyển dữ liệu ra thành công."
+  },
+  {
+    "question": "Theo Điều 25 Nghị định 13/2023/NĐ-CP, trong những trường hợp nào Bộ Công an có thể yêu cầu ngừng chuyển dữ liệu cá nhân ra nước ngoài?",
+    "ground_truth": "Theo khoản 8 Điều 25, Bộ Công an yêu cầu ngừng chuyển dữ liệu ra nước ngoài khi: (a) Phát hiện dữ liệu được sử dụng vào hoạt động vi phạm lợi ích, an ninh quốc gia Việt Nam; (b) Bên chuyển dữ liệu không chấp hành yêu cầu hoàn thiện hồ sơ; (c) Để xảy ra sự cố lộ, mất dữ liệu cá nhân của công dân Việt Nam."
+  },
+  {
+    "question": "Theo Điều 24 Nghị định 13/2023/NĐ-CP, trong bao nhiêu ngày kể từ khi bắt đầu xử lý dữ liệu, Bên Kiểm soát dữ liệu cá nhân phải gửi hồ sơ đánh giá tác động cho Bộ Công an?",
+    "ground_truth": "Theo khoản 4 Điều 24, hồ sơ đánh giá tác động xử lý dữ liệu cá nhân phải được gửi tới Bộ Công an (Cục An ninh mạng và phòng, chống tội phạm sử dụng công nghệ cao) 01 bản chính trong thời gian 60 ngày kể từ ngày tiến hành xử lý dữ liệu cá nhân."
+  },
+  {
+    "question": "Theo Điều 23 Nghị định 13/2023/NĐ-CP, nội dung thông báo vi phạm bảo vệ dữ liệu cá nhân gồm những gì?",
+    "ground_truth": "Theo khoản 3 Điều 23, nội dung thông báo vi phạm gồm: (a) Mô tả tính chất vi phạm (thời gian, địa điểm, hành vi, tổ chức/cá nhân, loại và số lượng dữ liệu liên quan); (b) Chi tiết liên lạc của nhân viên phụ trách bảo vệ dữ liệu; (c) Mô tả tác hại, thiệt hại có thể xảy ra; (d) Mô tả các biện pháp giải quyết, giảm thiểu tác hại."
+  },
+  {
+    "question": "Theo Điều 21 Nghị định 13/2023/NĐ-CP, điều kiện để sử dụng dữ liệu cá nhân trong kinh doanh dịch vụ tiếp thị, quảng cáo là gì?",
+    "ground_truth": "Theo Điều 21, tổ chức, cá nhân kinh doanh dịch vụ tiếp thị, quảng cáo chỉ được sử dụng dữ liệu cá nhân của khách hàng khi có sự đồng ý của chủ thể dữ liệu, trên cơ sở khách hàng biết rõ nội dung, phương thức, hình thức, tần suất giới thiệu sản phẩm. Họ cũng có trách nhiệm chứng minh việc sử dụng dữ liệu là đúng quy định."
+  },
+  {
+    "question": "So sánh giá trị hàng hóa bán ra trong kỳ (chỉ tiêu [26]) và giá trị hàng hóa bán ra chịu thuế GTGT (chỉ tiêu [29]) trong tờ khai bctc.md. Sự chênh lệch nói lên điều gì?",
+    "ground_truth": "Giá trị bán ra trong kỳ ([26]) là 2.405.743.421 đồng, trong khi giá trị chịu thuế GTGT ([29]) là 3.703.688.610 đồng. Chỉ tiêu [29] lớn hơn [26] vì [29] bao gồm cả giá trị hàng hóa lẫn thuế GTGT của hàng hóa bán ra (tức là giá đã bao gồm thuế), trong khi [26] chỉ là giá trị chưa có thuế."
+  },
+  {
+    "question": "Theo Nghị định 13/2023/NĐ-CP, xử lý dữ liệu cá nhân tự động là gì và mục đích của nó là gì?",
+    "ground_truth": "Theo khoản 13 Điều 2, xử lý dữ liệu cá nhân tự động là hình thức xử lý được thực hiện bằng phương tiện điện tử nhằm đánh giá, phân tích, dự đoán hoạt động của một con người cụ thể, như: thói quen, sở thích, mức độ tin cậy, hành vi, địa điểm, xu hướng, năng lực và các trường hợp khác."
+  },
+  {
+    "question": "Theo Điều 26 và Điều 28 Nghị định 13/2023/NĐ-CP, biện pháp bảo vệ dữ liệu cá nhân nhạy cảm có gì đặc biệt hơn so với bảo vệ dữ liệu cá nhân thông thường?",
+    "ground_truth": "Theo Điều 28, ngoài áp dụng các biện pháp chung tại Điều 26 và Điều 27, bảo vệ dữ liệu cá nhân nhạy cảm còn yêu cầu: (1) Chỉ định bộ phận có chức năng bảo vệ dữ liệu và nhân sự phụ trách, trao đổi thông tin với cơ quan chuyên trách; (2) Thông báo cho chủ thể dữ liệu biết dữ liệu nhạy cảm của họ đang được xử lý (trừ các trường hợp ngoại lệ theo Điều 13, 17, 18)."
+  },
+  {
+    "question": "Hồ sơ đánh giá tác động chuyển dữ liệu cá nhân ra nước ngoài theo Điều 25 Nghị định 13/2023/NĐ-CP cần có những nội dung gì?",
+    "ground_truth": "Theo khoản 2 Điều 25, hồ sơ gồm: (a) Thông tin và liên lạc của bên chuyển và bên tiếp nhận; (b) Thông tin tổ chức, cá nhân phụ trách; (c) Mô tả mục tiêu xử lý dữ liệu sau khi chuyển; (d) Mô tả loại dữ liệu chuyển ra nước ngoài; (e) Mô tả sự tuân thủ quy định và biện pháp bảo vệ; (f) Đánh giá mức độ ảnh hưởng và biện pháp giảm thiểu rủi ro; (g) Sự đồng ý của chủ thể dữ liệu; (h) Văn bản ràng buộc trách nhiệm giữa bên chuyển và bên nhận."
+  }
+]

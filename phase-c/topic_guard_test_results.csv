@@ -1,0 +1,21 @@
+text,expected_on_topic,allowed,score,best_topic,reason,correct
+Nghi dinh 13 quy dinh quyen cua chu the du lieu nhu the nao?,True,True,1.0000,keyword,On topic: keyword match,True
+Du lieu ca nhan nhay cam can bao ve ra sao?,True,True,1.0000,keyword,On topic: keyword match,True
+To khai thue GTGT co chi tieu nao quan trong?,True,True,1.0000,keyword,On topic: keyword match,True
+Bao cao tai chinh nay noi gi ve doanh thu?,True,True,1.0000,keyword,On topic: keyword match,True
+RAGAS faithfulness thap thi sua pipeline the nao?,True,True,1.0000,keyword,On topic: keyword match,True
+Lam sao do context precision trong RAG?,True,True,1.0000,keyword,On topic: keyword match,True
+Quy trinh audit log cho guardrail nen thiet ke sao?,True,True,1.0000,keyword,On topic: keyword match,True
+Can redact CCCD trong cau hoi nguoi dung nhu the nao?,True,True,1.0000,keyword,On topic: keyword match,True
+Cohen kappa dung de hieu chuan judge ra sao?,True,True,1.0000,keyword,On topic: keyword match,True
+Latency P95 cua guardrail nen benchmark the nao?,True,True,1.0000,keyword,On topic: keyword match,True
+Cong thuc nau pho bo ngon?,False,False,0.0000,keyword,Off topic: keyword match,True
+Lich thi dau bong da hom nay?,False,False,0.0000,keyword,Off topic: keyword match,True
+Viet tho tinh yeu bang tieng Anh,False,False,0.0000,keyword,Off topic: keyword match,True
+Cach sua xe may bi chet may?,False,False,0.0000,keyword,Off topic: keyword match,True
+Du lich Da Nang nen di dau?,False,False,0.0000,keyword,Off topic: keyword match,True
+Mua dien thoai nao choi game tot?,False,False,0.0000,keyword,Off topic: keyword match,True
+Huong dan trong cay ca chua,False,False,0.0000,keyword,Off topic: keyword match,True
+Cach tap gym tang co,False,False,0.0000,keyword,Off topic: keyword match,True
+Review phim moi nhat,False,False,0.0000,keyword,Off topic: keyword match,True
+Thoi tiet ngay mai o Ha Noi?,False,False,0.0000,keyword,Off topic: keyword match,True

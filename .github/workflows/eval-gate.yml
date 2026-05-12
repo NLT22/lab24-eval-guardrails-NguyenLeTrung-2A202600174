@@ -1,0 +1,40 @@
+name: RAG Eval Gate
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  eval:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Build Phase A artifacts
+        run: |
+          python phase-a/generate_testset.py
+          python phase-a/run_ragas_eval.py --mode existing
+          python phase-a/analyze_failures.py
+      - name: Run eval gate
+        run: |
+          python scripts/eval_gate.py \
+            --threshold faithfulness=0.75 \
+            --threshold answer_relevancy=0.70 \
+            --threshold context_precision=0.60 \
+            --threshold context_recall=0.65
+      - name: Upload eval artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase-a-eval
+          path: |
+            phase-a/testset_v1.csv
+            phase-a/ragas_results.csv
+            phase-a/ragas_summary.json
+            phase-a/failure_analysis.md

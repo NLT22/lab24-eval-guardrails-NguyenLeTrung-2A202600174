@@ -1,0 +1,91 @@
+{
+  "aggregate": {
+    "faithfulness": 0.7242063492063492,
+    "answer_relevancy": 0.7223853516526382,
+    "context_precision": 0.9583333332889661,
+    "context_recall": 0.8052469135802469
+  },
+  "num_questions": 54,
+  "failures": [
+    {
+      "question": "Kỳ tính thuế của tờ khai GTGT trong file bctc.md là gì?",
+      "avg_score": 0.0,
+      "worst_metric": "faithfulness",
+      "score": 0.0,
+      "diagnosis": "LLM hallucinating",
+      "suggested_fix": "Tighten prompt, lower temperature"
+    },
+    {
+      "question": "Tờ khai thuế GTGT trong file bctc.md được nộp lần đầu hay không?",
+      "avg_score": 0.25,
+      "worst_metric": "faithfulness",
+      "score": 0.0,
+      "diagnosis": "LLM hallucinating",
+      "suggested_fix": "Tighten prompt, lower temperature"
+    },
+    {
+      "question": "Bên Xử lý dữ liệu cá nhân là gì theo Nghị định 13/2023/NĐ-CP?",
+      "avg_score": 0.3958,
+      "worst_metric": "faithfulness",
+      "score": 0.0,
+      "diagnosis": "LLM hallucinating",
+      "suggested_fix": "Tighten prompt, lower temperature"
+    },
+    {
+      "question": "Người ký tờ khai thuế GTGT Quý 4 năm 2024 là ai?",
+      "avg_score": 0.4615,
+      "worst_metric": "faithfulness",
+      "score": 0.0,
+      "diagnosis": "LLM hallucinating",
+      "suggested_fix": "Tighten prompt, lower temperature"
+    },
+    {
+      "question": "Chủ thể dữ liệu có bao nhiêu quyền theo Điều 9 Nghị định 13/2023/NĐ-CP và đó là những quyền gì?",
+      "avg_score": 0.4713,
+      "worst_metric": "faithfulness",
+      "score": 0.0,
+      "diagnosis": "LLM hallucinating",
+      "suggested_fix": "Tighten prompt, lower temperature"
+    },
+    {
+      "question": "Tờ khai thuế GTGT bctc.md được ký và nộp vào ngày nào?",
+      "avg_score": 0.5,
+      "worst_metric": "faithfulness",
+      "score": 0.0,
+      "diagnosis": "LLM hallucinating",
+      "suggested_fix": "Tighten prompt, lower temperature"
+    },
+    {
+      "question": "Theo Điều 26 và Điều 28 Nghị định 13/2023/NĐ-CP, biện pháp bảo vệ dữ liệu cá nhân nhạy cảm có gì đặc biệt hơn so với bảo vệ dữ liệu cá nhân thông thường?",
+      "avg_score": 0.5,
+      "worst_metric": "faithfulness",
+      "score": 0.0,
+      "diagnosis": "LLM hallucinating",
+      "suggested_fix": "Tighten prompt, lower temperature"
+    },
+    {
+      "question": "Theo Điều 24 Nghị định 13/2023/NĐ-CP, trong bao nhiêu ngày kể từ khi bắt đầu xử lý dữ liệu, Bên Kiểm soát dữ liệu cá nhân phải gửi hồ sơ đánh giá tác động cho Bộ Công an?",
+      "avg_score": 0.5,
+      "worst_metric": "faithfulness",
+      "score": 0.0,
+      "diagnosis": "LLM hallucinating",
+      "suggested_fix": "Tighten prompt, lower temperature"
+    },
+    {
+      "question": "So sánh giá trị hàng hóa bán ra trong kỳ (chỉ tiêu [26]) và giá trị hàng hóa bán ra chịu thuế GTGT (chỉ tiêu [29]) trong tờ khai bctc.md. Sự chênh lệch nói lên điều gì?",
+      "avg_score": 0.5,
+      "worst_metric": "faithfulness",
+      "score": 0.0,
+      "diagnosis": "LLM hallucinating",
+      "suggested_fix": "Tighten prompt, lower temperature"
+    },
+    {
+      "question": "Bên thứ ba theo Nghị định 13/2023/NĐ-CP là ai?",
+      "avg_score": 0.56,
+      "worst_metric": "context_recall",
+      "score": 0.0,
+      "diagnosis": "Missing relevant chunks",
+      "suggested_fix": "Improve chunking or add BM25"
+    }
+  ]
+}

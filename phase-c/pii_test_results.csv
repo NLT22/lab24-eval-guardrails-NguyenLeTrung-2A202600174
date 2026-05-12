@@ -1,0 +1,11 @@
+input,expected_pii,detected,detected_types,sanitized,latency_ms
+"Hi, I'm John Smith from Microsoft. Email: john@ms.com",True,True,email;PERSON,"Hi, I'm <PERSON> from Microsoft. Email: [EMAIL]",193.926
+"Call me at +1-555-1234 or visit 123 Main Street, NYC",True,True,LOCATION,"Call me at +1-555-1234 or visit 123 Main Street, <LOCATION>",524.331
+So CCCD cua toi la 012345678901,True,True,cccd;PERSON,So CCCD <PERSON> la [CCCD],14.493
+Lien he qua 0987654321 hoac tax 0123456789-001,True,True,phone_vn;PERSON,<PERSON> he qua [PHONE_VN] hoac tax [PHONE_VN]-001,12.868
+"Customer Nguyen Van A, CCCD 098765432101, phone 0912345678",True,True,cccd;phone_vn,"Customer Nguyen Van A, CCCD [CCCD], phone [PHONE_VN]",8.968
+,False,False,,,0.015
+Just a normal question about Decree 13,False,False,,Just a normal question about Decree 13,6.714
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,False,False,,AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,17.703
+Le Van Binh o 123 Le Loi,True,True,PERSON,<PERSON> 123 Le Loi,8.104
+tax_code:0123456789-001 cccd:012345678901,True,True,cccd;phone_vn,tax_code:[PHONE_VN]-001 cccd:[CCCD],6.227
